@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,35 +41,39 @@
         <h1 class='banner-caption text-center p-5'>Welcome To My Blog</h1>
     </div>
     <div class="container mt-5">
+        
         <div class="row">
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="images/login.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
+            <!-- left login -->
+            <div class="col-md-6 col-12">
+                <div class='rounded'>
+                    <img src="images/login.jpg" alt="" height='600px' width='600px'class='img-fluid'>
                 </div>
+                
             </div>
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="images/login.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <!-- right login -->
+            <div class="col-12 col-md-6 p-5">
+                <h3 class='text-center mt-3 text-dark mb-5'>Welcome | Register here</h3>
+                
+                <form action="create.php" method='post'>
+                <div class='mb-3'>
+                        <label for="">Name</label>
+                        <input type="text" name="name"  class='form-control' >
                     </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="images/login.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class='mb-3'>
+                        <label for="">Email</label>
+                        <input type="text" name="email"  class='form-control' >
                     </div>
-                </div>
+                    <div class='mb-3'>
+                        <label for="">Password</label>
+                        <input type="password" name="password"  class='form-control' >
+                    </div>
+                    <button class='btn btn-primary w-100 fs'>Register</button>
+                </form>
+                <p class='text-center text-muted mt-3'>If you have an already account pls login |<a href="actions/login.php"> here!</a></p>
             </div>
         </div>
-            
+        
     </div>
-       
     <!-- footer -->
      <div class="row mt-5 bg-success w-100 p-5">
         <div class="col-12 text-center"><h5>Copyright &copy; all right reserved by Kwon 2024</h5></div>

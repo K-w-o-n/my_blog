@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +54,8 @@
             <div class="col-12 col-md-6 p-5">
                 <h3 class='text-center mt-3 text-dark mb-5'>Welcome</h3>
                 
-                <form action="" method='post'>
+                <form action="create.php" method='post'>
+                
                     <div class='mb-3'>
                         <label for="">Email</label>
                         <input type="text" name="email"  class='form-control' >
@@ -64,7 +66,7 @@
                     </div>
                     <button class='btn btn-primary w-100 fs'>Log in</button>
                 </form>
-                <p class='text-center text-muted mt-3'>If u don't have account register <a href="register.php">here!</a></p>
+                <p class='text-center text-muted mt-3'>If u don't have account register <a href="../register.php">here!</a></p>
             </div>
         </div>
         
