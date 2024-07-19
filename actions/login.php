@@ -1,3 +1,14 @@
+<?php
+session_start();
+use Database\MySQL;
+
+$email = $_POST['email'];
+$email = $_POST['password'];
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +17,7 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/bootstrap.bundle.min.js" defer></script>
-    <title>Document</title>
+    <title>Blog</title>
 </head>
 <body>
     <div class="container mt-5">
