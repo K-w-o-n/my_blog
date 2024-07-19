@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/bootstrap.bundle.min.js" defer></script>
-    <title>Document</title>
+    <title>Blog</title>
 </head>
 <body>
     <div class="container mt-5">

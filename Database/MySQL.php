@@ -1,9 +1,11 @@
 <?php
 
+
 namespace Database;
 
 use PDO;
 use PDOException;
+
 
 class MySQL
 {

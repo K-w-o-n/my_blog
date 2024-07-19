@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/bootstrap.bundle.min.js" defer></script>
-    <title>Document</title>
+
+    <title>Blog</title>
+
 </head>
 <body>
     <div class="container mt-5">
@@ -39,6 +41,7 @@
         <img src="images/login2.jpg" alt="" class='img-fluid'>
         <h1 class='banner-caption text-center p-5'>Welcome To My Blog</h1>
     </div>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col">
@@ -69,6 +72,7 @@
             
     </div>
        
+
     <!-- footer -->
      <div class="row mt-5 bg-success w-100 p-5">
         <div class="col-12 text-center"><h5>Copyright &copy; all right reserved by Kwon 2024</h5></div>
