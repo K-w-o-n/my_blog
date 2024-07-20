@@ -8,4 +8,6 @@ body {
 #footer {
     background-color:#002846;
     color: #fff;
+    height: auto;
+    width: 100vw;
 }

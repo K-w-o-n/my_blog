@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/bootstrap.bundle.min.js" defer></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/bootstrap.bundle.min.js" defer></script>
 
     <title>Blog</title>
 
@@ -37,13 +37,9 @@
         </div>
         </nav>
         <!-- navbar end -->
-    </div>
-    <div class='container my-3'>
-        <a href="create.php" type='button' class='btn btn-success'>New Blog</a>
-        <a href="logout.php" type='button' class='btn btn-default'>Logout</a>
-    </div>
+   
     <div class="container">
-        <img src="../images/login2.jpg" alt="" class='img-fluid'>
+        <img src="images/login2.jpg" alt="" class='img-fluid'>
         <h1 class='banner-caption text-center p-5'>Welcome To My Blog</h1>
     </div>
 
@@ -51,7 +47,7 @@
         <div class="row">
             <div class="col">
                 <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="../images/login.jpg" alt="Card image cap">
+                    <img class="card-img-top" src="images/login.jpg" alt="Card image cap">
                     <div class="card-body">
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
@@ -59,7 +55,7 @@
             </div>
             <div class="col">
                 <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="../images/login.jpg" alt="Card image cap">
+                    <img class="card-img-top" src="images/login.jpg" alt="Card image cap">
                     <div class="card-body">
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
@@ -67,7 +63,7 @@
             </div>
             <div class="col">
                 <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="../images/login.jpg" alt="Card image cap">
+                    <img class="card-img-top" src="images/login.jpg" alt="Card image cap">
                     <div class="card-body">
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
