@@ -1,4 +1,39 @@
+<?php
+session_start();
+require('../Database/MySQL.php');
 
+if($_POST) {
+
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = $db->prepare("SELECT * FROM users WHERE email=:email");
+    $stmt->execute([
+        ':email' => $email
+    ]);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($user) {
+        if($user['password'] == $password) {
+            $_SESSION['userid'] = $user['id'];
+            $SESSION['name'] = $user['name'];
+            $SESSION['login'] = time();
+
+           header("location: index.php");
+
+        } 
+    }
+
+    echo "<script>alert('Incorrect credentials')</script>";
+}
+
+
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +89,7 @@
             <div class="col-12 col-md-6 p-5">
                 <h3 class='text-center mt-3 text-dark mb-5'>Welcome</h3>
                 
-                <form action="create.php" method='post'>
+                <form action="login.php" method='post'>
                 
                     <div class='mb-3'>
                         <label for="">Email</label>
@@ -66,13 +101,13 @@
                     </div>
                     <button class='btn btn-primary w-100 fs'>Log in</button>
                 </form>
-                <p class='text-center text-muted mt-3'>If u don't have account register <a href="../register.php">here!</a></p>
+                <p class='text-center text-muted mt-3'>If u don't have account register <a href="register.php">here!</a></p>
             </div>
         </div>
         
     </div>
     <!-- footer -->
-     <div class="row mt-5 bg-success w-100 p-5">
+     <div class="row mt-5 w-100 p-3" id='footer'>
         <div class="col-12 text-center"><h5>Copyright &copy; all right reserved by Kwon 2024</h5></div>
      </div>
 </body>
