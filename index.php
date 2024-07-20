@@ -1,14 +1,4 @@
-<?php
-session_start();
-require('../Database/MySQL.php');
 
-if(empty($_SESSION['userid']) && empty($_SESSION['login'])) {
-    header('location: index.php');
-}
-
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
