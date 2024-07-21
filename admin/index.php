@@ -7,6 +7,13 @@ if(empty($_SESSION['userid']) && empty($_SESSION['login'])) {
 }
 
 
+$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
+
+$stmt->execute();
+
+$result = $stmt->fetchAll();
+
+
 
 ?>
 <!DOCTYPE html>
@@ -49,42 +56,52 @@ if(empty($_SESSION['userid']) && empty($_SESSION['login'])) {
                                 Blog listings
                             </div>
                             <div class="card-body">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
                             <tr>
                             <th scope="col">id</th>
                             <th scope="col">Title</th>
                             <th scope="col">Description</th>
                             <th scope="col">Photo</th>
+                            <th>Actions</th>
                             <th scope="col">Created_at</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>2024/7/21</td>
-                            </tr>
-                            <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>2024/7/21</td>
-                            </tr>
-                            <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>2024/7/21</td>
-                            </tr>
+                        <?php 
+                           
+                            if($result) {
+                                $i = 1;
+                                foreach($result as $value) { ?>
+
+                                <tbody>
+                                    <tr>
+                                    <td><?php echo $i ?></td>
+                                    <td><?php echo $value['title'] ?></td>
+                                    <td><?php echo $value['description'] ?></td>
+                                    <td>
+                                        <img class="img-fluid pad" src="images/<?php echo $value['photo']?>" style="height: 150px !important;">
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <a href="edit.php?id=<?php echo $value['id']?>" class="btn btn-success" type='button'>Edit</a>
+                                            <a href="delete.php?id=<?php echo $value['id']?>" class="btn btn-warning" type='button'>Delete</a>
+                                        </div>
+                                    </td>
+                                    <td><?php echo $value['created_at']?></td>
+                                    </tr>
+                                </tbody>
+
+                        <?php
+
+                            $i++;
+                                }
+                              
+                            
+                            }
                             
                         
-                        </tbody>
-                        <div>hello table footer</div>
+                        ?>
+
                         </table>
 
                             </div>

@@ -8,37 +8,47 @@ if(empty($_SESSION['userid']) && empty($_SESSION['login'])) {
 
 
 if($_POST) {
-    
-    // $file = 'images/'.($_FILES['image']['name']);
-    $file = 'images/'.($_FILES['image']['name']);
 
-    $imgType = pathinfo($file,PATHINFO_EXTENSION);
-    
-    if($imgType != 'png' && $imgType != 'jpg' && $imgType != 'jpeg' ) {
+    $id = $_POST['id'];
+    echo $id;exit();
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+   
 
-        echo "<script>alert('Image must be jpeg or png or jpg')</script>";
-    } else {
-        $title = $_POST['title'];
-        $description = $_POST['description'];
+    if ($_FILES['image']['name'] != null) {
+      $file = 'images/'.($_FILES['image']['name']);
+      $imageType = pathinfo($file,PATHINFO_EXTENSION);
 
+      if ($imageType != 'png' && $imageType != 'jpg' && $imageType != 'jpeg') {
+        echo "<script>alert('Image must be png,jpg,jpeg')</script>";
+      }else{
         $image = $_FILES['image']['name'];
         move_uploaded_file($_FILES['image']['tmp_name'],$file);
 
-        $stmt = $db->prepare("INSERT INTO articles(title, description, photo) VALUES(:title, :description, :photo)");
-        $result = $stmt->execute([
-            ':title' => $title,
-            ':description' => $description,
-            ':photo' => $image,
-            
-        ]);
-
-        if($result) {
-            
-            echo "<script>alert('Successfully added');window.location.href='index.php'</script>";
+        $stmt = $pdo->prepare("UPDATE articles SET title='$title',description='$description',image='$image'");
+        $result = $stmt->execute();
+        if ($result) {
+          echo "<script>alert('Successfully Updated');window.location.href='index.php';</script>";
         }
-
+      }
+    }else{
+      $stmt = $pdo->prepare("UPDATE articles SET title='$title',description='$description' WHERE id='$id'");
+      $result = $stmt->execute();
+      if ($result) {
+        echo "<script>alert('Successfully Updated');window.location.href='index.php';</script>";
+      }
     }
-}
+  }
+        
+
+
+$id = $_GET['id'];
+$stmt = $db->prepare("SELECT * FROM articles WHERE id=$id");
+$stmt->execute();
+$result = $stmt->fetch();
+// echo $result['id']; exit();
+        
+
 
 
 
@@ -81,16 +91,20 @@ if($_POST) {
                             </div>
                             <div class="card-body">
                             <form action='add.php' method='post' enctype='multipart/form-data'>
+                                <input type="hidden" name="id" value="<?php echo $result[0]['id']?>">
                                 <div class="form-group mb-3">
                                     <label>Title</label>
-                                    <input type="text" class="form-control" name='title'>
+                                    <input type="text" class="form-control" name='title' value="<?php echo $result['title']?>">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>Description</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='description'></textarea>
+                                    <textarea class="form-control"name='description'>
+                                        <?php echo $result['title']?>
+                                    </textarea>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>Image</label><br>
+                                    <img class="img-fluid pad" src="images/<?php echo $result['photo']?>" style="height: 150px !important;"><br><br>
                                     <input type="file" class="form-control-file" name='image'>
                                 </div>
                             
