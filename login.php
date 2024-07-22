@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('../Database/MySQL.php');
+require('Database/MySQL.php');
 
 if ($_POST) {
 
@@ -19,7 +19,7 @@ if ($_POST) {
             $_SESSION['userid'] = $user['id'];
             $SESSION['name'] = $user['name'];
             $SESSION['login'] = time();
-            $_SESSION['role'] = 1;
+            $_SESSION['role'] = 0;
 
             header("location: index.php");
         }
@@ -28,11 +28,6 @@ if ($_POST) {
     echo "<script>alert('Incorrect credentials')</script>";
 }
 
-
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,9 +35,9 @@ if ($_POST) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/bootstrap.bundle.min.js" defer></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/bootstrap.bundle.min.js" defer></script>
     <title>Blog</title>
 </head>
 
@@ -74,7 +69,7 @@ if ($_POST) {
         <!-- navbar end -->
     </div>
     <div class="container">
-        <img src="../images/login2.jpg" alt="" class='img-fluid'>
+        <img src="images/login2.jpg" alt="" class='img-fluid'>
         <h1 class='banner-caption text-center p-5'>Welcome To My Blog</h1>
     </div>
     <div class="container mt-5">
@@ -83,7 +78,7 @@ if ($_POST) {
             <!-- left login -->
             <div class="col-md-6 col-12">
                 <div class='rounded'>
-                    <img src="../images/login.jpg" alt="" height='600px' width='600px' class='img-fluid'>
+                    <img src="images/login.jpg" alt="" height='600px' width='600px' class='img-fluid'>
                 </div>
 
             </div>

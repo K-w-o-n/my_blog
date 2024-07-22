@@ -57,7 +57,7 @@ $result = $stmt->fetchAll();
                                 <a class="nav-link active" aria-current="page" href="#">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Articles</a>
+                                <a class="nav-link" href="logout.php">Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -68,8 +68,7 @@ $result = $stmt->fetchAll();
 
         <div class="container">
             <img src="images/login2.jpg" alt="" class='img-fluid'>
-            <h1 class='banner-caption text-center p-5'>Welcome To My Blog</h1>
-
+            <h1 class='text-center p-5'>Welcome To My Blog</h1>
         </div>
 
         <div class="container mt-5">
@@ -82,7 +81,7 @@ $result = $stmt->fetchAll();
                 ?>
                         <div class="col-md-4 mb-3">
                             <div class="card" style="width: 18rem;">
-                                <img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='300px' width='300px'>
+                               <a href="blogdetail.php?id=<?php echo $value['id'];?>"><img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='300px' width='300px'></a>
                                 <div class="card-body">
                                     <h4><?php echo $value['title'] ?></h4>
                                     <p class="card-text"><?php echo substr($value['description'], 0, 10); ?></p>
@@ -134,3 +133,8 @@ $result = $stmt->fetchAll();
 </body>
 
 </html>
+
+
+
+
+

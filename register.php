@@ -1,12 +1,71 @@
+<?php
+
+session_start();
+require('Database/MySQL.php');
+
+
+if($_POST) {
+    if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4) {
+        
+        if(empty($_POST['name'])) {
+            $nameError = "Name cannot be null";
+        }
+        if(empty($_POST['email'])) {
+            $emailError = "Email cannot be null";
+        }
+        if(empty($_POST['password'])) {
+            $passwordError = "Password cannot be null";
+        }
+        if(strlen($_POST['password'])) {
+            $passwordError = "Passsword should be 4 characters at least";
+        }
+    } else {
+
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+
+        $stmt = $db->prepare("SELECT * FROM users WHERE email=:email");
+        
+        $stmt->execute([
+            ":email" => $email
+        ]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+        if($user) {
+            echo "<script>alert('Email duplicated')</script>";
+        } else {
+            $stmt = $db->prepare("INSERT INTO users(name, email, password, role) VALUES (:name, :email, :password, :role)");
+
+            $result = $stmt->execute(
+                array(':name'=>$name,':email'=>$email,':password'=>$password,':role'=>0)
+            );
+
+           if($result) {
+                echo "<script>alert('Successfully Register, You can now login');window.location.href='login.php';</script>";
+           }
+        }
+    }
+}
+
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/bootstrap.bundle.min.js" defer></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/bootstrap.bundle.min.js" defer></script>
     <title>Document</title>
 </head>
 
@@ -38,8 +97,8 @@
         <!-- navbar end -->
     </div>
     <div class="container">
-        <img src="../images/login2.jpg" alt="" class='img-fluid'>
-        <h1 class='../banner-caption text-center p-5'>Welcome To My Blog</h1>
+        <img src="images/login2.jpg" alt="" class='img-fluid'>
+        <h1 class='banner-caption text-center p-5'>Welcome To My Blog</h1>
     </div>
     <div class="container mt-5">
 
@@ -47,7 +106,7 @@
             <!-- left login -->
             <div class="col-md-6 col-12">
                 <div class='rounded'>
-                    <img src="../images/login.jpg" alt="" height='600px' width='600px' class='img-fluid'>
+                    <img src="images/login.jpg" alt="" height='600px' width='600px' class='img-fluid'>
                 </div>
 
             </div>
@@ -55,15 +114,18 @@
             <div class="col-12 col-md-6 p-5">
                 <h3 class='text-center mt-3 text-dark mb-5'>Welcome | <span class='text-muted'>Register here</span></h3>
 
-                <form action="create.php" method='post'>
+                <form action="register.php" method='post'>
+                    <p style="color:red"><?php echo empty($nameError) ? '' : '*'. $nameError; ?></p>
                     <div class='mb-3'>
                         <label for="">Name</label>
                         <input type="text" name="name" class='form-control'>
                     </div>
+                    <p style="color:red"><?php echo empty($emailError) ? '' : '*'. $emailError; ?></p>
                     <div class='mb-3'>
                         <label for="">Email</label>
-                        <input type="text" name="email" class='form-control'>
+                        <input type="email" name="email" class='form-control'>
                     </div>
+                    <p style="color:red"><?php echo empty($passwordError) ? '' : '*'. $passwordError; ?></p>
                     <div class='mb-3'>
                         <label for="">Password</label>
                         <input type="password" name="password" class='form-control'>
