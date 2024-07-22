@@ -11,3 +11,6 @@ body {
     height: auto;
     width: 100vw;
 }
+#sidebar {
+    background: #0083aa;
+}

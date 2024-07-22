@@ -40,8 +40,6 @@ if($_POST) {
     }
 }
 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,8 +56,8 @@ if($_POST) {
 <body>
     <div class="container-fluid">
         <div class="row gap-0">
-            <nav class="col-2 bg-light pe-3">
-                <h1 class='h4 text-center text- py-3'>Admin</h1>
+            <nav class="col-2  pe-3" style="background: #0083aa !important;">
+                <h1 class='h4 text-center text-white py-3'>Admin</h1>
                 <div class="list-group text-center">
                     <span class="list-group-item disabled">
                         <small>USER MANAGEMENT</small>
