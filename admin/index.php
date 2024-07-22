@@ -14,6 +14,30 @@ $stmt->execute();
 $result = $stmt->fetchAll();
 
 
+if(!empty($_GET['pageno'])) {
+    $pageno = $_GET['pageno'];
+} else {
+    $pageno = 1;
+}
+
+$numOfRecords = 3;
+$offset = ($pageno -1) * $numOfRecords;
+
+$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
+$stmt->execute();
+$rawResult = $stmt->fetchAll();
+
+$total_pages = ceil(count($rawResult) / $numOfRecords);
+
+$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfRecords");
+$stmt->execute();
+$result = $stmt->fetchAll();
+
+
+
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -38,10 +62,10 @@ $result = $stmt->fetchAll();
                         <small>USER MANAGEMENT</small>
                     </span>
                     <a href="add.php" class="list-group-item">
-                        <span>Add user</span>
+                        <span>Add New Articles</span>
                     </a>
                     <a href="#" class="list-group-item">
-                        <span>Add post</span>
+                        <span>Add Users</span>
                     </a>
                 </div>
             </nav>
@@ -77,7 +101,7 @@ $result = $stmt->fetchAll();
                                     <tr>
                                     <td><?php echo $i ?></td>
                                     <td><?php echo $value['title'] ?></td>
-                                    <td><?php echo $value['description'] ?></td>
+                                    <td><?php echo substr($value['description'],0,10)?></td>
                                     <td>
                                         <img class="img-fluid pad" src="images/<?php echo $value['photo']?>" style="height: 150px !important;">
                                     </td>
@@ -101,8 +125,24 @@ $result = $stmt->fetchAll();
                             
                         
                         ?>
+                        
+                       
+                        
 
                         </table>
+                            <nav aria-label="Page navigation example" style="float:right">
+                                <ul class="pagination">
+                                    <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
+                                    <li class="page-item <?php if($pageno <= 1) { echo 'didabled';} ?>">
+                                        <a class="page-link" href="<?php if($pageno <= 1) {echo '#';} else { echo "?pageno".($pageno - 1);} ?>">Previous</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
+                                    <li class="page-item <?php if($pageno >= 1) { echo 'didabled';} ?>">
+                                        <a class="page-link" href="<?php if($pageno >= $total_pages) { echo '#';} else { echo "?pageno=".($pageno+1);}?>">Next</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
+                                </ul>
+                            </nav>
 
                             </div>
                 </div>              

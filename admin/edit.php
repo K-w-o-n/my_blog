@@ -99,7 +99,7 @@ $result = $stmt->fetch();
                                 <div class="form-group mb-3">
                                     <label>Description</label>
                                     <textarea class="form-control"name='description'>
-                                        <?php echo $result['title']?>
+                                        <?php echo $result['description']?>
                                     </textarea>
                                 </div>
                                 <div class="form-group mb-3">
@@ -120,3 +120,7 @@ $result = $stmt->fetch();
     
 </body>
 </html>
+
+
+
+
