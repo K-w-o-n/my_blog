@@ -27,7 +27,7 @@ $result = $stmt->fetchAll();
 </head>
 
 <body>
-    <div class="container mt-5">
+    <div class=" mt-5">
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg  shadow-sm">
             <div class="container">
@@ -67,11 +67,11 @@ $result = $stmt->fetchAll();
             </div>
         </div>
         <!-- footer -->
-        <div class="row mt-5 w-100 p-3" id='footer'>
-            <div class="col-12 text-center">
-                <h5>Copyright &copy; all right reserved by Kwon 2024</h5>
+        <footer>
+            <div class="py-5 text-center text-light" style="background-color: #372e5e;">
+                Copyright &copy; all right reserved by Kwon 2024
             </div>
-        </div>
+        </footer>
 </body>
 
 </html>

@@ -8,7 +8,7 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfrecs = 3;
+$numOfrecs = 4;
 $offset = ($pageno - 1) * $numOfrecs;
 
 $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
@@ -32,7 +32,7 @@ $result = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
     <script src="js/bootstrap.bundle.min.js" defer></script>
 
     <title>Blog</title>
@@ -40,9 +40,9 @@ $result = $stmt->fetchAll();
 </head>
 
 <body>
-    <div class="container mt-5">
+    <div>
         <!-- navbar -->
-        <nav class="navbar navbar-expand-lg  shadow-sm">
+        <nav class="navbar navbar-expand-lg  shadow-sm position-sticky">
             <div class="container">
                 <div>
                     <a class="navbar-brand text-success h-3" href="#">Blog</a>
@@ -57,8 +57,17 @@ $result = $stmt->fetchAll();
                                 <a class="nav-link active" aria-current="page" href="#">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="logout.php">Logout</a>
+                                <a class="nav-link" href="logout.php">About</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="logout.php">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="logout.php">More info</a>
+                            </li>
+                            
+                            <a class=" btn btn-primary" href="logout.php">Logout</a>
+                            
                         </ul>
                     </div>
                 </div>
@@ -66,40 +75,35 @@ $result = $stmt->fetchAll();
         </nav>
         <!-- navbar end -->
 
-        <div class="container">
-            <img src="images/login2.jpg" alt="" class='img-fluid'>
-            <h1 class='text-center p-5'>Welcome To My Blog</h1>
-        </div>
+        <main class="py-5 app">
+            <div class="container">
+                <div class="brand"></div>
+            </div>
+        </main>
 
-        <div class="container mt-5">
-
-            <div class="row">
-
+        <section class="container py-5">
+            <div class="row g-5">
                 <?php if ($result) {
                     $i = 1;
                     foreach ($result as $value) {
                 ?>
-                        <div class="col-md-4 mb-3">
-                            <div class="card" style="width: 18rem;">
-                               <a href="blogdetail.php?id=<?php echo $value['id'];?>"><img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='300px' width='300px'></a>
-                                <div class="card-body">
-                                    <h4><?php echo $value['title'] ?></h4>
-                                    <p class="card-text"><?php echo substr($value['description'], 0, 10); ?></p>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="col-md-4 mb-3">
+                                <div class="card" style="width: 18rem;">
+                                    <a href="blogdetail.php?id=<?php echo $value['id']; ?>"><img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='300px' width='300px'></a>
+                                    <div class="card-body">
+                                        <h4><?php echo $value['title'] ?></h4>
+                                        <p class="card-text"><?php echo substr($value['description'], 0, 10); ?></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                 <?php
                         $i++;
                     }
                 } ?>
-
             </div>
-
-
-        </div>
-
-        <ul class="pagination" style="margin: 0 auto;" !important>
+            <ul class="pagination" style="margin: 0 auto;" !important>
             <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
             <li class="page-item <?php if ($pageno <= 1) {
                                         echo 'didabled';
@@ -122,19 +126,13 @@ $result = $stmt->fetchAll();
             </li>
             <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
         </ul>
-
-
-        <!-- footer -->
-        <div class="row mt-5 w-100 p-3" id='footer'>
-            <div class="col-12 text-center">
-                <h5>Copyright &copy; all right reserved by Kwon 2024</h5>
+        </section>
+        <footer>
+            <div class="py-5 text-center text-light" style="background-color: #372e5e;">
+                Copyright &copy; all right reserved by Kwon 2024
             </div>
-        </div>
+        </footer>
+    </div>
 </body>
 
 </html>
-
-
-
-
-
