@@ -4,29 +4,21 @@ body {
     font-family: 'Poppins',sans-serif;
 }
 
-
-#footer {
-    background-color:#002846;
-    color: #fff;
-    height: auto;
-    width: 100vw;
-}
-#sidebar {
-    background: #0083aa;
-}
-.img-container {
-    position: relative;
+.foot {
+    margin-top: auto;
 }
 
-#banner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 40px;
-    font-weight: 500;
-    color: #0083aa;
-}
 
-.brand {
-    background-image: url(/images/mainphoto.jpg);
+.app {
+    background: rgba(43, 43, 43, 0.65) url('../images/login2.jpg');
+    background-blend-mode: soft-light;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 500px;
+}
+.wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }

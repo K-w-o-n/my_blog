@@ -62,8 +62,8 @@ if($_POST) {
                     <span class="list-group-item disabled">
                         <small>USER MANAGEMENT</small>
                     </span>
-                    <a href="add.php" class="list-group-item">
-                        <span>Add Post</span>
+                    <a href="index.php" class="list-group-item">
+                        <span>Blogs</span>
                     </a>
                     <a href="#" class="list-group-item">
                         <span>Add User</span>

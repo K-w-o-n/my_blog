@@ -6,7 +6,7 @@ if (empty($_SESSION['userid']) && empty($_SESSION['login'])) {
     header('location: index.php');
 }
 
-if($_SESSION['role'] != 1) {
+if ($_SESSION['role'] != 1) {
     header("Location: login.php");
 }
 
@@ -24,7 +24,7 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfRecords = 4;
+$numOfRecords = 6;
 $offset = ($pageno - 1) * $numOfRecords;
 
 $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
@@ -60,13 +60,13 @@ $result = $stmt->fetchAll();
 
 <body>
     <div class="container-fluid">
-        <div class="row gap-0">
-            <nav class="col-2" style="background: #0083aa !important;padding:0px !important;">
-                <div class="list-group text-center" style="border-radius: 0px !important;">
+        <div class="row gap-0 ">
+            <nav class="col-2 py-5" style="background: #0083aa;">
+                <div class="list-group text-center">
                     <span class="list-group-item disabled">
                         <h4>Dashboard</h4>
                     </span>
-                    <a href="add.php" class="list-group-item">
+                    <a href="index.php" class="list-group-item">
                         <span>Blogs</span>
                     </a>
                     <a href="#" class="list-group-item">
@@ -74,9 +74,46 @@ $result = $stmt->fetchAll();
                     </a>
                 </div>
             </nav>
-            <main class="col-10 bg-light" style="padding:0px !important;">
-                <div class="container-fluid " style="padding:0px !important;">
-
+            <main class="col-10 bg-light py-5">
+                <div class="container py-3">
+                    <div class="row flex-col flex-lg-row">
+                        <div class="col">
+                            <div class="card mb-3">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title h2">Users</h3>
+                                    <span class="text-success">
+                                        100+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                        <div class="card mb-3 bg-success">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title h2">Blogs</h3>
+                                    <span class="text-white">
+                                        100+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                        <div class="card mb-3 bg-warning">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title h2">Courses</h3>
+                                    <span class="text-white">
+                                        100+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                </div>
+                <div class="container-fluid py-5">
+                    <div class="d-flex justify-content-between mb-3">
+                    <h3>Blogs</h3>
+                    <a href="add.php" type="button" class="btn btn-primary">Create new Blog</a>
+                    </div>
                     <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
                             <tr>
@@ -147,8 +184,10 @@ $result = $stmt->fetchAll();
                         </ul>
                     </nav>
                 </div>
+                
 
             </main>
+            
         </div>
     </div>
 

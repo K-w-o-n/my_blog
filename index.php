@@ -42,10 +42,10 @@ $result = $stmt->fetchAll();
 <body>
     <div>
         <!-- navbar -->
-        <nav class="navbar navbar-expand-lg  shadow-sm position-sticky">
+        <nav class="navbar navbar-expand-lg  shadow-sm fixed-top bg-light">
             <div class="container">
                 <div>
-                    <a class="navbar-brand text-success h-3" href="#">Blog</a>
+                    <a class="navbar-brand text-success h-3" href="index.php">Blog</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -54,16 +54,16 @@ $result = $stmt->fetchAll();
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="logout.php">About</a>
+                                <a class="nav-link" href="#">About</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="logout.php">Blog</a>
+                                <a class="nav-link" href="#">Blog</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="logout.php">More info</a>
+                                <a class="nav-link" href="#">More info</a>
                             </li>
                             
                             <a class=" btn btn-primary" href="logout.php">Logout</a>
@@ -75,9 +75,16 @@ $result = $stmt->fetchAll();
         </nav>
         <!-- navbar end -->
 
-        <main class="py-5 app">
-            <div class="container">
-                <div class="brand"></div>
+        <main class="py-5 app mt-5">
+            <div class="container text-center mt-5">
+                <figure class="text-center ">
+                <blockquote class="blockquote">
+                    <h1 class="display-1 text-white">Welcome To My Blog</h1>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    <p class="h4 text-warning">About<cite title="Source Title"> Software engineering</cite></p>
+                </figcaption>
+                </figure>
             </div>
         </main>
 
@@ -129,7 +136,7 @@ $result = $stmt->fetchAll();
         </section>
         <footer>
             <div class="py-5 text-center text-light" style="background-color: #372e5e;">
-                Copyright &copy; all right reserved by Kwon 2024
+                <p class="fs-4">Copyright &copy; all right reserved by Kwon 2024</p>
             </div>
         </footer>
     </div>
