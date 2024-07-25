@@ -10,10 +10,8 @@ if (empty($_SESSION['userid']) && empty($_SESSION['login'])) {
 if ($_POST) {
 
     $id = $_POST['id'];
-    echo $id;
-    exit();
     $title = $_POST['title'];
-    $content = $_POST['content'];
+    $description = $_POST['description'];
 
 
     if ($_FILES['image']['name'] != null) {
@@ -26,14 +24,14 @@ if ($_POST) {
             $image = $_FILES['image']['name'];
             move_uploaded_file($_FILES['image']['tmp_name'], $file);
 
-            $stmt = $pdo->prepare("UPDATE articles SET title='$title',description='$description',image='$image'");
+            $stmt = $db->prepare("UPDATE articles SET title='$title',description='$description', photo='$image' WHERE id=".$_GET['id']);
             $result = $stmt->execute();
             if ($result) {
                 echo "<script>alert('Successfully Updated');window.location.href='index.php';</script>";
             }
         }
     } else {
-        $stmt = $pdo->prepare("UPDATE articles SET title='$title',description='$description' WHERE id='$id'");
+        $stmt = $db->prepare("UPDATE articles SET title='$title',description='$description' WHERE id='$id'");
         $result = $stmt->execute();
         if ($result) {
             echo "<script>alert('Successfully Updated');window.location.href='index.php';</script>";
@@ -93,7 +91,7 @@ $result = $stmt->fetch();
                             New Blog
                         </div>
                         <div class="card-body">
-                            <form action='add.php' method='post' enctype='multipart/form-data'>
+                            <form action='' method='post' enctype='multipart/form-data'>
                                 <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                                 <div class="form-group mb-3">
                                     <label>Title</label>

@@ -21,13 +21,13 @@ if (!empty($_GET['pageno'])) {
 $numOfRecords = 6;
 $offset = ($pageno - 1) * $numOfRecords;
 
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
+$stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC");
 $stmt->execute();
 $rawResult = $stmt->fetchAll();
 
 $total_pages = ceil(count($rawResult) / $numOfRecords);
 
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfRecords");
+$stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numOfRecords");
 $stmt->execute();
 $result = $stmt->fetchAll();
 
@@ -73,8 +73,8 @@ $result = $stmt->fetchAll();
                 <div class="container-fluid">
                     <div class="d-flex justify-content-between bg-primary text-white p-2">
                         <div class="d-flex">
-                            <h4 class="me-2">Blogs</h4>
-                            <a href="add.php" type="button" class="btn bg-white">Create new Blog</a>
+                            <h4 class="me-2">Users</h4>
+                            <a href="users/user_add.php" type="button" class="btn bg-white">Create new user</a>
                         </div>
                         <div class="d-none d-lg-block">
                                 <form class="form-inline my-lg-0 d-flex " action="">
@@ -87,11 +87,12 @@ $result = $stmt->fetchAll();
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">id</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Photo</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Role</th>
                                 <th>Actions</th>
-                                <th scope="col">Created_at</th>
+                               
                             </tr>
                         </thead>
                         <?php
@@ -103,18 +104,19 @@ $result = $stmt->fetchAll();
                                 <tbody>
                                     <tr>
                                         <td><?php echo $i ?></td>
-                                        <td><?php echo $value['title'] ?></td>
-                                        <td><?php echo substr($value['description'], 0, 10) ?></td>
+                                        <td><?php echo $value['name'] ?></td>
+                                        <td><?php echo $value['email'] ?></td>
                                         <td>
-                                            <img class="img-fluid pad" src="images/<?php echo $value['photo'] ?>" style="height: 150px !important;">
+                                            <?php echo $value['password'] ?>
                                         </td>
+                                        <td><?php echo $value['role'] ?></td>
                                         <td>
                                             <div>
-                                                <a href="edit.php?id=<?php echo $value['id'] ?>" class="btn btn-success" type='button'>Edit</a>
-                                                <a href="delete.php?id=<?php echo $value['id'] ?>" class="btn btn-warning" type='button'>Delete</a>
+                                                <a href="users/users_edit.php?id=<?php echo $value['id'] ?>" class="btn btn-success" type='button'>Edit</a>
+                                                <a href="users/users_delete.php?id=<?php echo $value['id'] ?>" class="btn btn-warning" type='button'>Delete</a>
                                             </div>
                                         </td>
-                                        <td><?php echo $value['created_at'] ?></td>
+                                        
                                     </tr>
                                 </tbody>
 

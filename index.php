@@ -42,13 +42,19 @@ $result = $stmt->fetchAll();
 <body>
     <div>
         <!-- navbar -->
-        <nav class="navbar navbar-expand-lg  shadow-sm fixed-top bg-light">
+        <nav class="navbar navbar-expand-lg  shadow-sm fixed-top bg-light py-3">
             <div class="container">
                 <div>
                     <a class="navbar-brand text-success h-3" href="index.php">Blog</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+                </div>
+                <div class="d-none d-lg-block">
+                        <form class="form-inline my-lg-0 d-flex " action="">
+                            <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-secondary  my-sm-0" type="submit">Search</button>
+                        </form>
                 </div>
                 <div>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -69,6 +75,7 @@ $result = $stmt->fetchAll();
                             <a class=" btn btn-primary" href="logout.php">Logout</a>
                             
                         </ul>
+                        
                     </div>
                 </div>
             </div>

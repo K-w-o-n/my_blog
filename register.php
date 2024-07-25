@@ -124,7 +124,7 @@ if ($_POST) {
                     </div>
                 </div>
                 <!-- right login -->
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6 shadow-lg rounded p-4">
                     <h3 class='text-center mt-3 text-dark mb-5'>Welcome | <span class='text-muted'>Register here</span></h3>
 
                     <form action="register.php" method='post'>

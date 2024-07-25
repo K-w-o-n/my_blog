@@ -43,6 +43,7 @@ if($_POST) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,32 +54,32 @@ if($_POST) {
     <title>Blog</title>
 
 </head>
+
 <body>
-    <div class="container-fluid">
-        <div class="row gap-0">
-            <nav class="col-2  pe-3" style="background: #0083aa !important;">
-                <h1 class='h4 text-center text-white py-3'>Admin</h1>
-                <div class="list-group text-center">
-                    <span class="list-group-item disabled">
-                        <small>USER MANAGEMENT</small>
-                    </span>
+    <div class="container-fluid p-5">
+        <div class="row bg-primary p-3 text-white">
+            <h4>Kwon blogs</h4>
+        </div>
+        <div class="row gap-0 ">
+            <nav class="col-2 bg-light pe-3" style="background: #0083aa;padding:0px;">
+                <div class="list-group rounded-0 text-center text-lg-start">
+                    <a href="dashboard.php" class="list-group-item">
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="user_list.php" class="list-group-item">
+                        <span>Users</span>
+                    </a>
                     <a href="index.php" class="list-group-item">
                         <span>Blogs</span>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span>Add User</span>
-                    </a>
                 </div>
             </nav>
-            <main class="col-10 bg-secondary"style="padding:0px">
-                    <div class="container-fluid mt-3 p-4">
-
-                        <div class="card">
-                            <div class="card-header">
-                                New Blog
-                            </div>
-                            <div class="card-body">
+            <main class="col-10 bg-light p-3">
+                <div class="row p-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
                             <form action='add.php' method='post' enctype='multipart/form-data'>
+                                <div><h4>Create New Blog</h4></div>
                                 <div class="form-group mb-3">
                                     <label>Title</label>
                                     <input type="text" class="form-control" name='title'>
@@ -91,16 +92,18 @@ if($_POST) {
                                     <label>Image</label><br>
                                     <input type="file" class="form-control-file" name='image'>
                                 </div>
-                            
+
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="index.php" type='button' class='btn btn-default'>Back</a>
-                            </form>  
-                            </div>
-                        </div>    
+                            </form>
+                        </div>
                     </div>
+                </div>
             </main>
+
         </div>
     </div>
-    
+
 </body>
+
 </html>
