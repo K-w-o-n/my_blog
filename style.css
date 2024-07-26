@@ -10,7 +10,7 @@ body {
 
 
 .app {
-    background: rgba(43, 43, 43, 0.65) url('images/login2.jpg');
+    background: rgba(88, 88, 88, 0.65) url('images/login2.jpg');
     background-blend-mode: soft-light;
     background-position: center;
     background-size: cover;

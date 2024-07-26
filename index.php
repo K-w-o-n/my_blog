@@ -8,7 +8,7 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfrecs = 4;
+$numOfrecs = 3;
 $offset = ($pageno - 1) * $numOfrecs;
 
 $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
@@ -40,7 +40,7 @@ $result = $stmt->fetchAll();
 </head>
 
 <body>
-    <div>
+    <div class="wrap">
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg  shadow-sm fixed-top bg-light py-3">
             <div class="container">
@@ -67,9 +67,6 @@ $result = $stmt->fetchAll();
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">More info</a>
                             </li>
                             
                             <a class=" btn btn-primary" href="logout.php">Logout</a>
@@ -101,12 +98,12 @@ $result = $stmt->fetchAll();
                     $i = 1;
                     foreach ($result as $value) {
                 ?>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 col-lg-3 mx-3 my-4">
                             <div class="col-md-4 mb-3">
-                                <div class="card" style="width: 18rem;">
-                                    <a href="blogdetail.php?id=<?php echo $value['id']; ?>"><img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='300px' width='300px'></a>
+                                <div class="card" style="width: 22rem;">
+                                    <a href="blogdetail.php?id=<?php echo $value['id']; ?>"><img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='250px' width='400px'></a>
                                     <div class="card-body">
-                                        <h4><?php echo $value['title'] ?></h4>
+                                        <h4><?php echo substr($value['title'], 0, 20); ?></h4>
                                         <p class="card-text"><?php echo substr($value['description'], 0, 10); ?></p>
                                     </div>
                                 </div>
@@ -141,7 +138,7 @@ $result = $stmt->fetchAll();
             <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
         </ul>
         </section>
-        <footer>
+        <footer class="foot">
             <div class="py-5 text-center text-light" style="background-color: #372e5e;">
                 <p class="fs-4">Copyright &copy; all right reserved by Kwon 2024</p>
             </div>

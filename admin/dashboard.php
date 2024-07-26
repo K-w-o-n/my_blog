@@ -11,25 +11,17 @@ if ($_SESSION['role'] != 1) {
 }
 
 
+$stmt = $db->prepare("SELECT *  FROM users");
+$result = $stmt->execute();
+$users = $stmt->fetchAll();
+$userCount = count($users);
 
-if (!empty($_GET['pageno'])) {
-    $pageno = $_GET['pageno'];
-} else {
-    $pageno = 1;
-}
+$stmtblog = $db->prepare("SELECT *  FROM articles");
+$resultblog = $stmtblog->execute();
+$blogs = $stmtblog->fetchAll();
+$blogsCount = count($blogs);
 
-$numOfRecords = 6;
-$offset = ($pageno - 1) * $numOfRecords;
 
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
-$stmt->execute();
-$rawResult = $stmt->fetchAll();
-
-$total_pages = ceil(count($rawResult) / $numOfRecords);
-
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfRecords");
-$stmt->execute();
-$result = $stmt->fetchAll();
 
 ?>
 
@@ -86,7 +78,7 @@ $result = $stmt->fetchAll();
                         <div class="col text-center">
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <h3 class="card-title h2">8,210</h3>
+                                    <h3 class="card-title h2"><?= $userCount ?></h3>
                                     <span class="text-success">
                                        
                                         Users
@@ -97,7 +89,7 @@ $result = $stmt->fetchAll();
                         <div class="col text-center">
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <h3 class="card-title h2">8,210</h3>
+                                    <h3 class="card-title h2"><?= $blogsCount ?></h3>
                                     <span class="text-success">
                                        
                                         Blogs

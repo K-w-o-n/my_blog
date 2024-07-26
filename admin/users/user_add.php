@@ -92,13 +92,13 @@ if ($_POST) {
         <div class="row gap-0 ">
             <nav class="col-2 bg-light pe-3" style="background: #0083aa;padding:0px;">
                 <div class="list-group rounded-0 text-center text-lg-start">
-                    <a href="dashboard.php" class="list-group-item">
+                    <a href="../dashboard.php" class="list-group-item">
                         <span>Dashboard</span>
                     </a>
-                    <a href="user_list.php" class="list-group-item">
+                    <a href="../user_list.php" class="list-group-item">
                         <span>Users</span>
                     </a>
-                    <a href="index.php" class="list-group-item">
+                    <a href="../index.php" class="list-group-item">
                         <span>Blogs</span>
                     </a>
                 </div>
