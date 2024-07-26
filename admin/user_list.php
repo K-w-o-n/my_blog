@@ -10,6 +10,17 @@ if ($_SESSION['role'] != 1) {
     header("Location: login.php");
 }
 
+if($_POST['search']) {
+// echo $_POST['search']; exit();
+     setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+} else {
+    if(empty($_GET['pageno'])) {
+        unset($_COOKIE['search']);
+        setcookie('search',null, -1, "/");
+    }
+}
+
+
 
 
 if (!empty($_GET['pageno'])) {
@@ -18,23 +29,35 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfRecords = 6;
-$offset = ($pageno - 1) * $numOfRecords;
+$numOfrecs = 6;
+$offset = ($pageno - 1) * $numOfrecs;
 
-$stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC");
-$stmt->execute();
-$rawResult = $stmt->fetchAll();
+if(empty($_POST['search']) && empty($_COOKIE['search'])) {
 
-$total_pages = ceil(count($rawResult) / $numOfRecords);
-
-$stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numOfRecords");
-$stmt->execute();
-$result = $stmt->fetchAll();
-
-
-
-
-
+    $stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC");
+    $stmt->execute();
+    $rawResult = $stmt->fetchAll();
+    
+    $total_pages = ceil(count($rawResult) / $numOfrecs);
+    
+    $stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+        
+    } else {
+        $searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+        $stmt = $db->prepare("SELECT * FROM users WHERE email LIKE '%$searchKey%' ORDER BY id DESC");
+        $stmt->execute();
+        $rawResult = $stmt->fetchAll();
+    
+        $total_pages = ceil(count($rawResult) / $numOfrecs);
+    
+        $stmt = $db->prepare("SELECT * FROM users WHERE email LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+    
+    }
+    
 
 
 ?>
@@ -77,8 +100,8 @@ $result = $stmt->fetchAll();
                             <a href="users/user_add.php" type="button" class="btn bg-white">Create new user</a>
                         </div>
                         <div class="d-none d-lg-block">
-                                <form class="form-inline my-lg-0 d-flex " action="">
-                                    <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="form-inline my-lg-0 d-flex " action="user_list.php" method="post">
+                                    <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search" name="search">
                                     <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
                                 </form>
                         </div>

@@ -10,6 +10,17 @@ if ($_SESSION['role'] != 1) {
     header("Location: login.php");
 }
 
+if($_POST['search']) {
+// echo $_POST['search']; exit();
+     setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+}
+
+if($_POST['search'] = "") {
+    if(empty($_GET['pageno'])) {
+        unset($_COOKIE['search']);
+        setcookie('search',null, -1, "/");
+    }
+}
 
 
 if (!empty($_GET['pageno'])) {
@@ -18,23 +29,35 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfRecords = 6;
-$offset = ($pageno - 1) * $numOfRecords;
+$numOfrecs = 6;
+$offset = ($pageno - 1) * $numOfrecs;
 
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
-$stmt->execute();
-$rawResult = $stmt->fetchAll();
+if(empty($_POST['search']) && empty($_COOKIE['search'])) {
 
-$total_pages = ceil(count($rawResult) / $numOfRecords);
-
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfRecords");
-$stmt->execute();
-$result = $stmt->fetchAll();
-
-
-
-
-
+    $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
+    $stmt->execute();
+    $rawResult = $stmt->fetchAll();
+    
+    $total_pages = ceil(count($rawResult) / $numOfrecs);
+    
+    $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+        
+    } else {
+        $searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+        $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
+        $stmt->execute();
+        $rawResult = $stmt->fetchAll();
+    
+        $total_pages = ceil(count($rawResult) / $numOfrecs);
+    
+        $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+    
+    }
+    
 
 
 ?>
@@ -54,11 +77,13 @@ $result = $stmt->fetchAll();
 
 <body>
     <div class="container-fluid p-5">
-        <div class="row bg-primary p-3 text-white"><h4>Kwon blogs</h4></div>
+        <div class="row bg-primary p-3 text-white">
+            <h4>Kwon blogs</h4>
+        </div>
         <div class="row gap-0 ">
             <nav class="col-2 bg-light pe-3" style="background: #0083aa;padding:0px;">
                 <div class="list-group rounded-0 text-center text-lg-start">
-                <a href="dashboard.php" class="list-group-item">
+                    <a href="dashboard.php" class="list-group-item">
                         <span>Dashboard</span>
                     </a>
                     <a href="user_list.php" class="list-group-item">
@@ -77,10 +102,10 @@ $result = $stmt->fetchAll();
                             <a href="add.php" type="button" class="btn bg-white">Create new Blog</a>
                         </div>
                         <div class="d-none d-lg-block">
-                                <form class="form-inline my-lg-0 d-flex " action="">
-                                    <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search">
-                                    <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
-                                </form>
+                            <form class="form-inline my-lg-0 d-flex " action="index.php" method="post">
+                                <input class="form-control mr-sm-2 me-2" type="search" name="search">
+                                <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
+                            </form>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered rounded-3 overflow-hidden">
@@ -155,10 +180,10 @@ $result = $stmt->fetchAll();
                         </nav>
                     </div>
                 </div>
-                
+
 
             </main>
-            
+
         </div>
     </div>
 

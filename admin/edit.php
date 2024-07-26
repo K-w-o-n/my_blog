@@ -31,7 +31,7 @@ if ($_POST) {
             }
         }
     } else {
-        $stmt = $db->prepare("UPDATE articles SET title='$title',description='$description' WHERE id='$id'");
+        $stmt = $db->prepare("UPDATE articles SET title='$title',description='$description' WHERE id=".$_GET['id']);
         $result = $stmt->execute();
         if ($result) {
             echo "<script>alert('Successfully Updated');window.location.href='index.php';</script>";

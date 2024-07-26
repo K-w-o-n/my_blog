@@ -2,14 +2,26 @@
 session_start();
 require('Database/MySQL.php');
 
+
+if($_POST['search']) {
+    // echo $_POST['search']; exit();
+         setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+    } else {
+        if(empty($_GET['pageno'])) {
+            unset($_COOKIE['search']);
+            setcookie('search',null, -1, "/");
+        }
+    }
 if (!empty($_GET['pageno'])) {
     $pageno = $_GET['pageno'];
 } else {
     $pageno = 1;
 }
 
-$numOfrecs = 3;
+$numOfrecs = 6;
 $offset = ($pageno - 1) * $numOfrecs;
+
+if(empty($_POST['search']) && empty($_COOKIE['search'])) {
 
 $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
 $stmt->execute();
@@ -20,6 +32,22 @@ $total_pages = ceil(count($rawResult) / $numOfrecs);
 $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfrecs");
 $stmt->execute();
 $result = $stmt->fetchAll();
+    
+} else {
+    $searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+    $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
+    $stmt->execute();
+    $rawResult = $stmt->fetchAll();
+
+    $total_pages = ceil(count($rawResult) / $numOfrecs);
+
+    $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+}
+
+
 
 ?>
 
@@ -51,10 +79,10 @@ $result = $stmt->fetchAll();
                     </button>
                 </div>
                 <div class="d-none d-lg-block">
-                        <form class="form-inline my-lg-0 d-flex " action="">
-                            <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-secondary  my-sm-0" type="submit">Search</button>
-                        </form>
+                    <form class="form-inline my-lg-0 d-flex" action="index.php" method="post">
+                        <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                        <button class="btn btn-outline-secondary  my-sm-0" type="submit">Search</button>
+                    </form>
                 </div>
                 <div>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -65,14 +93,14 @@ $result = $stmt->fetchAll();
                             <li class="nav-item">
                                 <a class="nav-link" href="#">About</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
                                 <a class="nav-link" href="#">Blog</a>
                             </li>
-                            
+
                             <a class=" btn btn-primary" href="logout.php">Logout</a>
-                            
+
                         </ul>
-                        
+
                     </div>
                 </div>
             </div>
@@ -82,61 +110,62 @@ $result = $stmt->fetchAll();
         <main class="py-5 app mt-5">
             <div class="container text-center mt-5">
                 <figure class="text-center ">
-                <blockquote class="blockquote">
-                    <h1 class="display-1 text-white">Welcome To My Blog</h1>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    <p class="h4 text-warning">About<cite title="Source Title"> Software engineering</cite></p>
-                </figcaption>
+                    <blockquote class="blockquote">
+                        <h3 class="display-1 text-white">Welcome To My Blog</h3>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                        <p class="h4 text-warning">About<cite title="Source Title"> Software engineering</cite></p>
+                    </figcaption>
                 </figure>
             </div>
         </main>
 
         <section class="container py-5">
-            <div class="row g-5">
-                <?php if ($result) {
-                    $i = 1;
-                    foreach ($result as $value) {
-                ?>
-                        <div class="col-12 col-md-6 col-lg-3 mx-3 my-4">
-                            <div class="col-md-4 mb-3">
-                                <div class="card" style="width: 22rem;">
-                                    <a href="blogdetail.php?id=<?php echo $value['id']; ?>"><img class="card-img-top" src="admin/images/<?php echo $value['photo']; ?>" alt="Card image cap" height='250px' width='400px'></a>
-                                    <div class="card-body">
-                                        <h4><?php echo substr($value['title'], 0, 20); ?></h4>
-                                        <p class="card-text"><?php echo substr($value['description'], 0, 10); ?></p>
-                                    </div>
-                                </div>
+            <h4 class="text-black-50 text-center mt-5">Blogs</h4>
+            <hr class="mb-5" style="width:40%;text-align:center;margin:auto;">
+            <div class="row g-5 mb-3">
+            <?php if ($result) {
+                $i = 1;
+                foreach ($result as $value) { ?>
+                    <div class="col">
+                        <div class="card mb-3" style="width: 22rem;">
+                            <a href="blogdetail.php?id=<?= $value['id'] ?>"><img class="card-img-top" src="admin/images/<?= $value['photo'] ?>" alt="Card image cap" height="200px"></a>
+                            <div class="card-body">
+                                <h4 class="card-title"><?= substr($value['title'], 0, 20) ?></h4>
+                                <span class="card-subtitle text-muted"><?= $value['created_at'] ?></span>
+                                <p class="card-text"><?= substr($value['description'], 0, 20) ?></p>
                             </div>
                         </div>
-                <?php
-                        $i++;
-                    }
-                } ?>
+                    </div>
+            <?php }
+                $i++;
+            } ?>
             </div>
-            <ul class="pagination" style="margin: 0 auto;" !important>
-            <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
-            <li class="page-item <?php if ($pageno <= 1) {
-                                        echo 'didabled';
-                                    } ?>">
-                <a class="page-link" href="<?php if ($pageno <= 1) {
-                                                echo '#';
-                                            } else {
-                                                echo "?pageno" . ($pageno - 1);
-                                            } ?>">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
-            <li class="page-item <?php if ($pageno >= 1) {
-                                        echo 'didabled';
-                                    } ?>">
-                <a class="page-link" href="<?php if ($pageno >= $total_pages) {
-                                                echo '#';
-                                            } else {
-                                                echo "?pageno=" . ($pageno + 1);
-                                            } ?>">Next</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
-        </ul>
+            <div class="d-flex justify-content-center mb-3">
+                <ul class="pagination" style="margin: 0 auto;" !important>
+                    <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
+                    <li class="page-item <?php if ($pageno <= 1) {
+                                                echo 'didabled';
+                                            } ?>">
+                        <a class="page-link" href="<?php if ($pageno <= 1) {
+                                                        echo '#';
+                                                    } else {
+                                                        echo "?pageno" . ($pageno - 1);
+                                                    } ?>">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
+                    <li class="page-item <?php if ($pageno >= 1) {
+                                                echo 'didabled';
+                                            } ?>">
+                        <a class="page-link" href="<?php if ($pageno >= $total_pages) {
+                                                        echo '#';
+                                                    } else {
+                                                        echo "?pageno=" . ($pageno + 1);
+                                                    } ?>">Next</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
+                </ul>
+            </div>
         </section>
         <footer class="foot">
             <div class="py-5 text-center text-light" style="background-color: #372e5e;">
