@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../Database/MySQL.php');
+require('../Database/encap.php');
 
 if ($_POST) {
 
@@ -102,9 +103,9 @@ if ($_POST) {
                     </div>
                 </div>
                 <!-- right login -->
-                <div class="col-12 col-md-6 p-5">
+                <div class="col-12 col-md-6 p-5 shadow-lg rounded">
                     <h3 class='text-center mt-3 text-dark mb-5'>Welcome</h3>
-                    <form action="login.php" method='post'>\
+                    <form action="login.php" method='post'>
                     <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                         <div class='mb-3'>
                             <label for="">Email</label>
@@ -131,4 +132,4 @@ if ($_POST) {
 
 </html>
 
-password_verify($password,$user['password'])
+<!-- password_verify($password,$user['password']) -->

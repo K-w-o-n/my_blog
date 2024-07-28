@@ -43,7 +43,12 @@ $blogsCount = count($blogs);
 <body>
     <div class="container-fluid p-5">
         <div class="row bg-primary p-3 text-white">
-            <h4>Kwon blogs</h4>
+            <div class="d-flex justify-content-between">
+                <h4>Kwon blogs</h4>
+                <div>
+                    <a href="logout.php" type="button" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
         </div>
         <div class="row gap-0 ">
             <nav class="col-2 bg-light pe-3" style="background: #0083aa;padding:0px;">
@@ -80,7 +85,7 @@ $blogsCount = count($blogs);
                                 <div class="card-body">
                                     <h3 class="card-title h2"><?= $userCount ?></h3>
                                     <span class="text-success">
-                                       
+
                                         Users
                                     </span>
                                 </div>
@@ -91,7 +96,7 @@ $blogsCount = count($blogs);
                                 <div class="card-body">
                                     <h3 class="card-title h2"><?= $blogsCount ?></h3>
                                     <span class="text-success">
-                                       
+
                                         Blogs
                                     </span>
                                 </div>
@@ -102,7 +107,7 @@ $blogsCount = count($blogs);
                                 <div class="card-body">
                                     <h3 class="card-title h2">8,210</h3>
                                     <span class="text-success">
-                                       
+
                                         Courses
                                     </span>
                                 </div>

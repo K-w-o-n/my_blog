@@ -78,7 +78,12 @@ if (empty($_POST['search']) && empty($_COOKIE['search'])) {
 <body>
     <div class="container-fluid p-5">
         <div class="row bg-primary p-3 text-white">
-            <h4>Kwon blogs</h4>
+            <div class="d-flex justify-content-between">
+                <h4>Kwon blogs</h4>
+                <div>
+                    <a href="logout.php" type="button" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
         </div>
         <div class="row gap-0 ">
             <nav class="col-2 bg-light pe-3" style="background: #0083aa;padding:0px;">
@@ -103,7 +108,7 @@ if (empty($_POST['search']) && empty($_COOKIE['search'])) {
                         </div>
                         <div class="d-none d-lg-block">
                             <form class="form-inline my-lg-0 d-flex " action="index.php" method="post">
-                            <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
+                                <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                                 <input class="form-control mr-sm-2 me-2" type="search" name="search">
                                 <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
                             </form>
