@@ -34,7 +34,7 @@ if (empty($_POST['search']) && empty($_COOKIE['search'])) {
     $stmt->execute();
     $result = $stmt->fetchAll();
 } else {
-    if (!empty($_POST['search'])) {
+     if (!empty($_POST['search'])) {
         $searchKey = $_POST['search'];
     } else {
         $searchKey = $_COOKIE['search'];
