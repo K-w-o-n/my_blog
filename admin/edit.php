@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../Database/MySQL.php');
+require('../Database/encap.php');
 
 if (empty($_SESSION['userid']) && empty($_SESSION['login'])) {
     header('location: index.php');
@@ -94,12 +95,12 @@ $result = $stmt->fetch();
                                 <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                                 <div class="form-group mb-3">
                                     <label>Title</label>
-                                    <input type="text" class="form-control" name='title' value="<?php echo $result['title'] ?>">
+                                    <input type="text" class="form-control" name='title' value="<?php echo encap($result['title'] )?>">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>Description</label>
                                     <textarea class="form-control" name='description'>
-                                        <?php echo $result['description'] ?>
+                                        <?php echo encap($result['description']) ?>
                                     </textarea>
                                 </div>
                                 <div class="form-group mb-3">

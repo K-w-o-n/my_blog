@@ -79,6 +79,7 @@ if($_POST) {
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <form action='add.php' method='post' enctype='multipart/form-data'>
+                            <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                                 <div><h4>Create New Blog</h4></div>
                                 <div class="form-group mb-3">
                                     <label>Title</label>

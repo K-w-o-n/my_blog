@@ -65,8 +65,8 @@ $result = $stmt->fetchAll();
                         
                         <div class="card-body">
                             <img class="img-fluid" src="admin/images/<?php echo $result[0]['photo']; ?>" alt="Card image cap">
-                            <h4 class="mt-3"><?php echo $result[0]['title']; ?></h4>
-                            <p class="card-text"><?php echo $result[0]['description']; ?></p>
+                            <h4 class="mt-3"><?php echo encap($result[0]['title']); ?></h4>
+                            <p class="card-text"><?php echo encap($result[0]['description']); ?></p>
                             <a href="index.php" class="btn btn-primary">Back</a>
                         </div>
                     </div>

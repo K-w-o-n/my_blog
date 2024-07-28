@@ -108,6 +108,7 @@ if ($_POST) {
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <form action='user_add.php' method='post' >
+                            <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                                 <div>
                                     <h4>Create New User</h4>
                                 </div>

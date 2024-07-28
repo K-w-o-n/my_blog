@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../Database/MySQL.php');
+require('../Database/encap.php');
 
 if (empty($_SESSION['userid']) && empty($_SESSION['login'])) {
     header('location: index.php');
@@ -10,18 +11,15 @@ if ($_SESSION['role'] != 1) {
     header("Location: login.php");
 }
 
-if($_POST['search']) {
-// echo $_POST['search']; exit();
-     setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
-}
 
-if($_POST['search'] = "") {
-    if(empty($_GET['pageno'])) {
+if (!empty($_POST['search'])) {
+    setcookie('search', $_POST['search'], time() + (86400 * 30), "/");
+} else {
+    if (empty($_GET['pageno'])) {
         unset($_COOKIE['search']);
-        setcookie('search',null, -1, "/");
+        setcookie('search', null, -1, '/');
     }
 }
-
 
 if (!empty($_GET['pageno'])) {
     $pageno = $_GET['pageno'];
@@ -29,35 +27,37 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfrecs = 6;
+$numOfrecs = 3;
 $offset = ($pageno - 1) * $numOfrecs;
 
-if(empty($_POST['search']) && empty($_COOKIE['search'])) {
+if (empty($_POST['search']) && empty($_COOKIE['search'])) {
 
     $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
     $stmt->execute();
     $rawResult = $stmt->fetchAll();
-    
+
     $total_pages = ceil(count($rawResult) / $numOfrecs);
-    
+
     $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfrecs");
     $stmt->execute();
     $result = $stmt->fetchAll();
-        
+} else {
+    if (!empty($_POST['search'])) {
+        $searchKey = $_POST['search'];
     } else {
-        $searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
-        $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
-        $stmt->execute();
-        $rawResult = $stmt->fetchAll();
-    
-        $total_pages = ceil(count($rawResult) / $numOfrecs);
-    
-        $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-    
+        $searchKey = $_COOKIE['search'];
     }
-    
+    $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
+    $stmt->execute();
+    $rawResult = $stmt->fetchAll();
+
+    $total_pages = ceil(count($rawResult) / $numOfrecs);
+
+    $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+}
+
 
 
 ?>
@@ -103,6 +103,7 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                         </div>
                         <div class="d-none d-lg-block">
                             <form class="form-inline my-lg-0 d-flex " action="index.php" method="post">
+                            <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                                 <input class="form-control mr-sm-2 me-2" type="search" name="search">
                                 <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
                             </form>
@@ -128,8 +129,8 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo $i ?></td>
-                                        <td><?php echo $value['title'] ?></td>
-                                        <td><?php echo substr($value['description'], 0, 10) ?></td>
+                                        <td><?php echo encap($value['title']) ?></td>
+                                        <td><?php echo encap(substr($value['description'], 0, 10)) ?></td>
                                         <td>
                                             <img class="img-fluid pad" src="images/<?php echo $value['photo'] ?>" style="height: 150px !important;">
                                         </td>
@@ -157,17 +158,17 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                             <ul class="pagination">
                                 <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
                                 <li class="page-item <?php if ($pageno <= 1) {
-                                                            echo 'didabled';
+                                                            echo 'disabled';
                                                         } ?>">
                                     <a class="page-link" href="<?php if ($pageno <= 1) {
                                                                     echo '#';
                                                                 } else {
-                                                                    echo "?pageno" . ($pageno - 1);
+                                                                    echo "?pageno=" . ($pageno - 1);
                                                                 } ?>">Previous</a>
                                 </li>
                                 <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
-                                <li class="page-item <?php if ($pageno >= 1) {
-                                                            echo 'didabled';
+                                <li class="page-item <?php if ($pageno >= $total_pages) {
+                                                            echo 'disabled';
                                                         } ?>">
                                     <a class="page-link" href="<?php if ($pageno >= $total_pages) {
                                                                     echo '#';

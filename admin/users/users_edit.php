@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../../Database/MySQL.php');
+require('../../Database/encap.php');
 
 if (empty($_SESSION['userid']) && empty($_SESSION['login'])) {
     header('location: index.php');
@@ -90,15 +91,15 @@ $result = $stmt->fetch();
                                 <div class="form-group mb-2">
                                 <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                                     <label>Name</label><p style="color:red"><?php echo empty($nameError) ? '' : '*'.$nameError; ?></p>
-                                    <input type="text" class="form-control" name='name' value="<?php echo $result['name'] ?>">
+                                    <input type="text" class="form-control" name='name' value="<?php echo encap($result['name']) ?>">
                                 </div>
                                 <div class="form-group mb-2">
                                     <label>Email</label><p style="color:red"><?php echo empty($emailError) ? '' : '*'.$emailError; ?></p>
-                                    <input type="email" class="form-control" name='email' value="<?php echo $result['email'] ?>">
+                                    <input type="email" class="form-control" name='email' value="<?php echo encap($result['email'] )?>">
                                 </div>
                                 <div class="form-group mb-2">
                                     <label>Password</label><p style="color:red"><?php echo empty($passwordError) ? '' : '*'.$passwordError; ?></p>
-                                    <input type="password" class="form-control" name='password' value="<?php echo $result['password'] ?>">
+                                    <input type="password" class="form-control" name='password' value="<?php echo encap($result['password']) ?>">
                                 </div>
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" name="role" value="1">

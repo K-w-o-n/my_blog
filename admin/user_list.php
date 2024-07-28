@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../Database/MySQL.php');
+require('../Database/encap.php');
 
 if (empty($_SESSION['userid']) && empty($_SESSION['login'])) {
     header('location: index.php');
@@ -10,17 +11,16 @@ if ($_SESSION['role'] != 1) {
     header("Location: login.php");
 }
 
-if($_POST['search']) {
-// echo $_POST['search']; exit();
-     setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+
+if (!empty($_POST['search'])) {
+    setcookie('search', $_POST['search'], time() + (86400 * 30), "/");
 } else {
-    if(empty($_GET['pageno'])) {
+    if (empty($_GET['pageno'])) {
         unset($_COOKIE['search']);
-        setcookie('search',null, -1, "/");
+        unset($_POST['search']);
+        setcookie('search', null, -1, '/');
     }
 }
-
-
 
 
 if (!empty($_GET['pageno'])) {
@@ -29,35 +29,43 @@ if (!empty($_GET['pageno'])) {
     $pageno = 1;
 }
 
-$numOfrecs = 6;
+$numOfrecs = 3;
 $offset = ($pageno - 1) * $numOfrecs;
 
-if(empty($_POST['search']) && empty($_COOKIE['search'])) {
+
+
+
+if (empty($_POST['search']) && empty($_COOKIE['search'])) {
 
     $stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC");
     $stmt->execute();
     $rawResult = $stmt->fetchAll();
-    
+
     $total_pages = ceil(count($rawResult) / $numOfrecs);
-    
+    // echo $total_pages;die();
+
     $stmt = $db->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numOfrecs");
     $stmt->execute();
     $result = $stmt->fetchAll();
-        
+} else {
+
+    if (!empty($_POST['search'])) {
+        $searchKey = $_POST['search'];
     } else {
-        $searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
-        $stmt = $db->prepare("SELECT * FROM users WHERE email LIKE '%$searchKey%' ORDER BY id DESC");
-        $stmt->execute();
-        $rawResult = $stmt->fetchAll();
-    
-        $total_pages = ceil(count($rawResult) / $numOfrecs);
-    
-        $stmt = $db->prepare("SELECT * FROM users WHERE email LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-    
+        $searchKey = $_COOKIE['search'];
     }
-    
+    // echo $_COOKIE['search'];exit();
+    $stmt = $db->prepare("SELECT * FROM users WHERE email LIKE '%$searchKey%' ORDER BY id DESC");
+    $stmt->execute();
+    $rawResult = $stmt->fetchAll();
+
+    $total_pages = ceil(count($rawResult) / $numOfrecs);
+
+    $stmt = $db->prepare("SELECT * FROM users WHERE email LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+}
+
 
 
 ?>
@@ -77,11 +85,13 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
 
 <body>
     <div class="container-fluid p-5">
-        <div class="row bg-primary p-3 text-white"><h4>Kwon blogs</h4></div>
+        <div class="row bg-primary p-3 text-white">
+            <h4>Kwon blogs</h4>
+        </div>
         <div class="row gap-0 ">
             <nav class="col-2 bg-light pe-3" style="background: #0083aa;padding:0px;">
                 <div class="list-group rounded-0 text-center text-lg-start">
-                <a href="dashboard.php" class="list-group-item">
+                    <a href="dashboard.php" class="list-group-item">
                         <span>Dashboard</span>
                     </a>
                     <a href="user_list.php" class="list-group-item">
@@ -100,10 +110,11 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                             <a href="users/user_add.php" type="button" class="btn bg-white">Create new user</a>
                         </div>
                         <div class="d-none d-lg-block">
-                                <form class="form-inline my-lg-0 d-flex " action="user_list.php" method="post">
-                                    <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search" name="search">
-                                    <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
-                                </form>
+                            <form class="form-inline my-lg-0 d-flex " action="user_list.php" method="post">
+                            <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
+                                <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                                <button class="btn btn-outline-success bg-success text-white  my-sm-0" type="submit">Search</button>
+                            </form>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered rounded-3 overflow-hidden">
@@ -115,7 +126,7 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                                 <th scope="col">Password</th>
                                 <th scope="col">Role</th>
                                 <th>Actions</th>
-                               
+
                             </tr>
                         </thead>
                         <?php
@@ -139,7 +150,7 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                                                 <a href="users/users_delete.php?id=<?php echo $value['id'] ?>" class="btn btn-warning" type='button'>Delete</a>
                                             </div>
                                         </td>
-                                        
+
                                     </tr>
                                 </tbody>
 
@@ -157,17 +168,17 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                             <ul class="pagination">
                                 <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
                                 <li class="page-item <?php if ($pageno <= 1) {
-                                                            echo 'didabled';
+                                                            echo 'disabled';
                                                         } ?>">
                                     <a class="page-link" href="<?php if ($pageno <= 1) {
                                                                     echo '#';
                                                                 } else {
-                                                                    echo "?pageno" . ($pageno - 1);
+                                                                    echo "?pageno=" . ($pageno - 1);
                                                                 } ?>">Previous</a>
                                 </li>
                                 <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
-                                <li class="page-item <?php if ($pageno >= 1) {
-                                                            echo 'didabled';
+                                <li class="page-item <?php if ($pageno >= $total_pages) {
+                                                            echo 'disabled';
                                                         } ?>">
                                     <a class="page-link" href="<?php if ($pageno >= $total_pages) {
                                                                     echo '#';
@@ -180,10 +191,10 @@ if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                         </nav>
                     </div>
                 </div>
-                
+
 
             </main>
-            
+
         </div>
     </div>
 

@@ -104,7 +104,8 @@ if ($_POST) {
                 <!-- right login -->
                 <div class="col-12 col-md-6 p-5">
                     <h3 class='text-center mt-3 text-dark mb-5'>Welcome</h3>
-                    <form action="login.php" method='post'>
+                    <form action="login.php" method='post'>\
+                    <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                         <div class='mb-3'>
                             <label for="">Email</label>
                             <input type="text" name="email" class='form-control'>

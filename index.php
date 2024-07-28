@@ -1,40 +1,44 @@
 <?php
 session_start();
 require('Database/MySQL.php');
+require('Database/encap.php');
 
 
-if($_POST['search']) {
+if ($_POST['search']) {
     // echo $_POST['search']; exit();
-         setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
-    } else {
-        if(empty($_GET['pageno'])) {
-            unset($_COOKIE['search']);
-            setcookie('search',null, -1, "/");
-        }
+    setcookie('search', $_POST['search'], time() + (86400 * 30), "/");
+} else {
+    if (empty($_GET['pageno'])) {
+        unset($_COOKIE['search']);
+        setcookie('search', null, -1, "/");
     }
+}
 if (!empty($_GET['pageno'])) {
     $pageno = $_GET['pageno'];
 } else {
     $pageno = 1;
 }
 
-$numOfrecs = 6;
+$numOfrecs = 3;
 $offset = ($pageno - 1) * $numOfrecs;
 
-if(empty($_POST['search']) && empty($_COOKIE['search'])) {
+if (empty($_POST['search']) && empty($_COOKIE['search'])) {
 
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
-$stmt->execute();
-$rawResult = $stmt->fetchAll();
+    $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC");
+    $stmt->execute();
+    $rawResult = $stmt->fetchAll();
 
-$total_pages = ceil(count($rawResult) / $numOfrecs);
+    $total_pages = ceil(count($rawResult) / $numOfrecs);
 
-$stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfrecs");
-$stmt->execute();
-$result = $stmt->fetchAll();
-    
+    $stmt = $db->prepare("SELECT * FROM articles ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
 } else {
-    $searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+    if (!empty($_POST['search'])) {
+        $searchKey = $_POST['search'];
+    } else {
+        $searchKey = $_COOKIE['search'];
+    }
     $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
     $stmt->execute();
     $rawResult = $stmt->fetchAll();
@@ -44,7 +48,6 @@ $result = $stmt->fetchAll();
     $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE '%$searchKey%'ORDER BY id DESC LIMIT $offset,$numOfrecs");
     $stmt->execute();
     $result = $stmt->fetchAll();
-
 }
 
 
@@ -80,6 +83,7 @@ $result = $stmt->fetchAll();
                 </div>
                 <div class="d-none d-lg-block">
                     <form class="form-inline my-lg-0 d-flex" action="index.php" method="post">
+                    <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                         <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search" name="search">
                         <button class="btn btn-outline-secondary  my-sm-0" type="submit">Search</button>
                     </form>
@@ -124,38 +128,38 @@ $result = $stmt->fetchAll();
             <h4 class="text-black-50 text-center mt-5">Blogs</h4>
             <hr class="mb-5" style="width:40%;text-align:center;margin:auto;">
             <div class="row g-5 mb-3">
-            <?php if ($result) {
-                $i = 1;
-                foreach ($result as $value) { ?>
-                    <div class="col">
-                        <div class="card mb-3" style="width: 22rem;">
-                            <a href="blogdetail.php?id=<?= $value['id'] ?>"><img class="card-img-top" src="admin/images/<?= $value['photo'] ?>" alt="Card image cap" height="200px"></a>
-                            <div class="card-body">
-                                <h4 class="card-title"><?= substr($value['title'], 0, 20) ?></h4>
-                                <span class="card-subtitle text-muted"><?= $value['created_at'] ?></span>
-                                <p class="card-text"><?= substr($value['description'], 0, 20) ?></p>
+                <?php if ($result) {
+                    $i = 1;
+                    foreach ($result as $value) { ?>
+                        <div class="col">
+                            <div class="card mb-3 shadow-lg" style="width: 22rem;">
+                                <a href="blogdetail.php?id=<?= $value['id'] ?>"><img class="card-img-top" src="admin/images/<?= $value['photo'] ?>" alt="Card image cap" height="200px"></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><?= encap(substr($value['title'], 0, 20) )?></h4>
+                                    <span class="card-subtitle text-muted"><?= $value['created_at'] ?></span>
+                                    <p class="card-text"><?= encap(substr($value['description'], 0, 20)) ?></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-            <?php }
-                $i++;
-            } ?>
+                <?php }
+                    $i++;
+                } ?>
             </div>
             <div class="d-flex justify-content-center mb-3">
                 <ul class="pagination" style="margin: 0 auto;" !important>
                     <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
                     <li class="page-item <?php if ($pageno <= 1) {
-                                                echo 'didabled';
+                                                echo 'disabled';
                                             } ?>">
                         <a class="page-link" href="<?php if ($pageno <= 1) {
                                                         echo '#';
                                                     } else {
-                                                        echo "?pageno" . ($pageno - 1);
+                                                        echo "?pageno=" . ($pageno - 1);
                                                     } ?>">Previous</a>
                     </li>
                     <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
-                    <li class="page-item <?php if ($pageno >= 1) {
-                                                echo 'didabled';
+                    <li class="page-item <?php if ($pageno >= $total_pages) {
+                                                echo 'disabled';
                                             } ?>">
                         <a class="page-link" href="<?php if ($pageno >= $total_pages) {
                                                         echo '#';
