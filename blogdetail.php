@@ -1,11 +1,48 @@
 <?php
 session_start();
 require('Database/MySQL.php');
+require('Database/encap.php');
 
-
-$stmt = $db->prepare("SELECT * FROM articles WHERE id=" . $_GET['id']);
+$id = $_GET['id'];
+$stmt = $db->prepare("SELECT * FROM articles WHERE id=$id");
 $stmt->execute();
 $result = $stmt->fetchAll();
+
+
+// for cmResult
+$blogId = $_GET['id'];
+$cmStmt = $db->prepare("SELECT * FROM comments WHERE article_id=$blogId");
+$cmStmt->execute();
+$cmResult = $cmStmt->fetchAll();
+
+
+$auResult = [];
+
+if ($cmResult) {
+    foreach ($cmResult as $key => $value) {
+        $authorId = $cmResult[$key]['author_id'];
+        $stmtau = $db->prepare("SELECT * FROM users WHERE id=$authorId");
+        $stmtau->execute();
+        $auResult[] = $stmtau->fetchAll();
+    }
+}
+
+
+if ($_POST) {
+    if (empty($_POST['content'])) {
+        $cmtError = '!** Comment cannot be null';
+    } else {
+        $content = $_POST['content'];
+        $stmt = $db->prepare("INSERT INTO comments(content,author_id,article_id) VALUES (:content,:author_id,:article_id)");
+        $stmt->execute(
+            array(':content' => $content, ':author_id' => $_SESSION['userid'], ':article_id' => $blogId)
+        );
+        if ($result) {
+            header('Location: blogdetail.php?id=' . $blogId);
+        }
+    }
+}
+
 
 
 ?>
@@ -50,7 +87,7 @@ $result = $stmt->fetchAll();
                                 <a class="nav-link" href="#">More info</a>
                             </li>
 
-                            <a class=" btn btn-primary" href="#">Logout</a>
+                            <a class=" btn btn-primary" href="logout.php">Logout</a>
 
                         </ul>
                     </div>
@@ -62,12 +99,34 @@ $result = $stmt->fetchAll();
             <div class="container mt-5">
                 <div class="col-12">
                     <div class="card p-3">
-                        
+
                         <div class="card-body">
                             <img class="img-fluid" src="admin/images/<?php echo $result[0]['photo']; ?>" alt="Card image cap">
                             <h4 class="mt-3"><?php echo encap($result[0]['title']); ?></h4>
                             <p class="card-text"><?php echo encap($result[0]['description']); ?></p>
-                            <a href="index.php" class="btn btn-primary">Back</a>
+                            <a href="index.php" class="btn btn-success">&laquo;</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <h5 class="">Comments</h5>
+                            <?php if ($cmResult) { ?>
+                                <?php foreach ($cmResult as $key => $value) { ?>
+                                    <div class="card-comment mb-3 bg-info px-3 py-2 rounded bg-light">
+
+                                        <span><?= encap($auResult[$key][0]['name']) ?><span class="text-muted" style="float: right;"><?= $value['created_at'] ?><a href="cmdelete.php?id=<?php echo $value['id'] ?>" class="btn btn-close btn-sm ms-2"></a></span></span>
+                                        <div class="font-weight-bold" style="font-size: small;"><?= encap($value['content']) ?></div>
+                                    </div>
+                                    <span style="color:red;"><?= $cmtError ?? ""; ?></span>
+                            <?php }
+                            }
+                            ?>
+                            <form action="" method="post" class="d-flex">
+                                <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
+
+                                <input type="text" name="content" id="" class="form-control form-control-sm me-2" placeholder="comment">
+                                <button class="btn btn-sm btn-primary">Comment</button>
+
+                            </form>
                         </div>
                     </div>
                 </div>
